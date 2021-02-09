@@ -32,6 +32,22 @@ export const QuestionDetailes = props => {
             }
           >
             <h3>{props.question.optionOne.text}</h3>
+            {props.isAnswered && (
+              <>
+                <h2>{`${props.optionOneVotes} out of ${props.totalVotes}`}</h2>
+                <label htmlFor='file'>
+                  {((props.optionOneVotes / props.totalVotes) * 100).toFixed()}%
+                </label>
+                {` `}
+                <progress
+                  id='file'
+                  value={(props.optionOneVotes / props.totalVotes) * 100}
+                  max='100'
+                >
+                  {(props.optionOneVotes / props.totalVotes) * 100}
+                </progress>
+              </>
+            )}
           </button>
           <button
             disabled={props.isAnswered}
@@ -47,6 +63,22 @@ export const QuestionDetailes = props => {
             }
           >
             <h3>{props.question.optionTwo.text}</h3>
+            {props.isAnswered && (
+              <>
+                <h3>{`${props.optionTwoVotes} out of ${props.totalVotes}`}</h3>
+                <label htmlFor='file'>
+                  {((props.optionTwoVotes / props.totalVotes) * 100).toFixed()}%
+                </label>
+                {` `}
+                <progress
+                  id='file'
+                  value={(props.optionTwoVotes / props.totalVotes) * 100}
+                  max='100'
+                >
+                  {(props.optionTwoVotes / props.totalVotes) * 100}
+                </progress>
+              </>
+            )}
           </button>
         </div>
       </div>
@@ -67,6 +99,9 @@ const mapStateToProps = ({ users, questions, authedUser }, props) => {
   const user = users[question.author]
   const isAnswered = Object.keys(users[authedUser].answers).includes(qid)
   const selectedOption = users[authedUser].answers[qid]
+  const optionTwoVotes = question.optionTwo.votes.length
+  const optionOneVotes = question.optionOne.votes.length
+  const totalVotes = optionTwoVotes + optionOneVotes
   return {
     question,
     user,
@@ -74,6 +109,9 @@ const mapStateToProps = ({ users, questions, authedUser }, props) => {
     isAnswered,
     selectedOption,
     isNotExist: false,
+    totalVotes,
+    optionOneVotes,
+    optionTwoVotes,
   }
 }
 
